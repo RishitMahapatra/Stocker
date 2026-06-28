@@ -1,11 +1,6 @@
 """
 Stocker — Feature Engineer
 Computes technical indicators from raw_prices and saves to features table.
-
-NOTE: Uses TA-Lib (ta-lib package) since pandas-ta is not available for
-Python 3.11 on PyPI. Column name conventions follow the pandas-ta naming
-scheme as documented in the Architecture Bible so downstream code is
-unaffected.
 """
 
 import math
@@ -14,7 +9,7 @@ from datetime import datetime
 
 import numpy as np
 import pandas as pd
-import talib
+import pandas_ta as ta
 
 from backend.database import RawPrice, Feature
 from backend.config import MIN_CANDLES_REQUIRED
@@ -35,8 +30,8 @@ def _nan_to_none(val):
 
 def compute_features(ticker: str, db_session) -> dict:
     """
-    Read last 200 rows from raw_prices for ticker, compute technical indicators
-    via TA-Lib, save to features table, and return a feature dict.
+    Read last 200 rows from raw_prices for ticker, compute technical indicators,
+    save to features table, and return a feature dict.
     """
     try:
         print(f"[feature_engineer] Computing features for {ticker}")
@@ -64,45 +59,27 @@ def compute_features(ticker: str, db_session) -> dict:
 
         df = df.astype(float)
 
-        close  = df["close"].values.astype(np.float64)
-        high   = df["high"].values.astype(np.float64)
-        low    = df["low"].values.astype(np.float64)
-        volume = df["volume"].values.astype(np.float64)
-
         print(f"[feature_engineer] Computing RSI, MACD, EMA, BBands, ATR, ADX ...")
 
-        # RSI_14
-        rsi_arr = talib.RSI(close, timeperiod=14)
+        df.ta.rsi(length=14, append=True)
+        df.ta.macd(fast=12, slow=26, signal=9, append=True)
+        df.ta.ema(length=20, append=True)
+        df.ta.ema(length=50, append=True)
+        df.ta.ema(length=200, append=True)
+        df.ta.bbands(length=20, std=2, append=True)
+        df.ta.atr(length=14, append=True)
+        df.ta.adx(length=14, append=True)
 
-        # MACD_12_26_9
-        macd_arr, macds_arr, macdh_arr = talib.MACD(
-            close, fastperiod=12, slowperiod=26, signalperiod=9
-        )
+        last = df.iloc[-1]
 
-        # EMA_20, EMA_50, EMA_200
-        ema20_arr  = talib.EMA(close, timeperiod=20)
-        ema50_arr  = talib.EMA(close, timeperiod=50)
-        ema200_arr = talib.EMA(close, timeperiod=200)
+        def g(col):
+            return _nan_to_none(last.get(col))
 
-        # BBands (20, 2.0)
-        bbu_arr, bbm_arr, bbl_arr = talib.BBANDS(
-            close, timeperiod=20, nbdevup=2.0, nbdevdn=2.0, matype=0
-        )
+        current_price = _nan_to_none(last["close"])
+        volume_avg_20 = _nan_to_none(df["volume"].tail(20).mean())
 
-        # ATR_14
-        atr_arr = talib.ATR(high, low, close, timeperiod=14)
-
-        # ADX_14
-        adx_arr = talib.ADX(high, low, close, timeperiod=14)
-
-        def last(arr):
-            return _nan_to_none(arr[-1])
-
-        current_price = _nan_to_none(close[-1])
-        volume_avg_20 = _nan_to_none(np.nanmean(volume[-20:]))
-
-        high_52 = _nan_to_none(np.nanmax(high))
-        low_52  = _nan_to_none(np.nanmin(low))
+        high_52 = _nan_to_none(df["high"].max())
+        low_52  = _nan_to_none(df["low"].min())
 
         price_vs_52h = None
         price_vs_52l = None
@@ -112,18 +89,18 @@ def compute_features(ticker: str, db_session) -> dict:
             price_vs_52l = current_price / low_52
 
         features = {
-            "rsi_14":          last(rsi_arr),
-            "macd_line":       last(macd_arr),
-            "macd_signal":     last(macds_arr),
-            "macd_histogram":  last(macdh_arr),
-            "ema_20":          last(ema20_arr),
-            "ema_50":          last(ema50_arr),
-            "ema_200":         last(ema200_arr),
-            "bb_upper":        last(bbu_arr),
-            "bb_lower":        last(bbl_arr),
-            "bb_middle":       last(bbm_arr),
-            "atr_14":          last(atr_arr),
-            "adx_14":          last(adx_arr),
+            "rsi_14":          g("RSI_14"),
+            "macd_line":       g("MACD_12_26_9"),
+            "macd_signal":     g("MACDs_12_26_9"),
+            "macd_histogram":  g("MACDh_12_26_9"),
+            "ema_20":          g("EMA_20"),
+            "ema_50":          g("EMA_50"),
+            "ema_200":         g("EMA_200"),
+            "bb_upper":        g("BBU_20_2.0"),
+            "bb_lower":        g("BBL_20_2.0"),
+            "bb_middle":       g("BBM_20_2.0"),
+            "atr_14":          g("ATRr_14"),
+            "adx_14":          g("ADX_14"),
             "current_price":   current_price,
             "volume_avg_20":   volume_avg_20,
             "price_vs_52h":    price_vs_52h,
