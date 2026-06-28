@@ -1,11 +1,10 @@
 import { useEffect, useRef } from 'react';
 
-const colorFor = (score, color) => {
-  if (color) return color;
-  if (score >= 60) return '#00C853';
-  if (score <= 40) return '#FF3D00';
-  return '#ffbd45';
-};
+function colorFor(score) {
+  if (score >= 60) return 'var(--green)';
+  if (score <= 40) return 'var(--red)';
+  return 'var(--amber)';
+}
 
 export default function ScoreBar({ score = 0, color, label, showNumber = true }) {
   const fillRef = useRef(null);
@@ -13,23 +12,22 @@ export default function ScoreBar({ score = 0, color, label, showNumber = true })
   useEffect(() => {
     const el = fillRef.current;
     if (!el) return;
-    // Defer to next frame so CSS transition fires
-    const id = requestAnimationFrame(() => { el.style.width = `${score}%`; });
+    const id = requestAnimationFrame(() => { el.style.width = `${Math.min(100, Math.max(0, score))}%`; });
     return () => cancelAnimationFrame(id);
   }, [score]);
 
-  const c = colorFor(score, color);
+  const c = color || colorFor(score);
 
   return (
     <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
       {label && (
-        <span style={{ fontSize: 14, color: '#bbcbb8', flex: '0 0 80px' }}>{label}</span>
+        <span style={{ fontSize: 12, color: 'var(--text-secondary)', flex: '0 0 80px' }}>{label}</span>
       )}
-      <div className="score-track" style={{ flex: 1 }}>
+      <div className="score-track">
         <div ref={fillRef} className="score-fill" style={{ background: c }} />
       </div>
       {showNumber && (
-        <span style={{ fontSize: 12, fontWeight: 600, color: c, width: 24, textAlign: 'right' }}>
+        <span style={{ fontSize: 11, fontWeight: 600, color: c, width: 22, textAlign: 'right', fontVariantNumeric: 'tabular-nums' }}>
           {score}
         </span>
       )}

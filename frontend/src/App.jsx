@@ -4,6 +4,7 @@ import Navbar from './components/Navbar';
 import Dashboard from './pages/Dashboard';
 import Signals from './pages/Signals';
 import Portfolio from './pages/Portfolio';
+import TickerDetail from './pages/TickerDetail';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -20,9 +21,10 @@ export default function App() {
       <BrowserRouter>
         <Navbar />
         <Routes>
-          <Route path="/"          element={<Dashboard />} />
-          <Route path="/signals"   element={<Signals />} />
-          <Route path="/portfolio" element={<Portfolio />} />
+          <Route path="/"                element={<Dashboard />} />
+          <Route path="/signals"         element={<Signals />} />
+          <Route path="/portfolio"       element={<Portfolio />} />
+          <Route path="/ticker/:ticker"  element={<TickerDetail />} />
         </Routes>
       </BrowserRouter>
     </QueryClientProvider>

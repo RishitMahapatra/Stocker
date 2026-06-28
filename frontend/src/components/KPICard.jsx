@@ -1,20 +1,28 @@
-export default function KPICard({ label, value, icon, valueClass = '', gradientTop = false, children }) {
+export default function KPICard({ label, value, sub, children, accent = false }) {
   return (
-    <div className={`glass-card${gradientTop ? ' kpi-border-top' : ''}`} style={{
-      borderRadius: 8, padding: 20,
-      display: 'flex', flexDirection: 'column', gap: 8,
+    <div className="card" style={{
+      display: 'flex',
+      flexDirection: 'column',
+      gap: 6,
+      borderTop: accent ? '2px solid var(--green)' : '2px solid transparent',
     }}>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', color: '#bbcbb8' }}>
-        <span style={{ fontSize: 12, fontWeight: 600, letterSpacing: '0.05em', textTransform: 'uppercase' }}>
-          {label}
-        </span>
-        {icon && (
-          <span className="material-symbols-outlined" style={{ fontSize: 20, color: '#bbcbb8' }}>{icon}</span>
-        )}
-      </div>
-      <div className={valueClass} style={{ fontSize: 36, fontWeight: 700, letterSpacing: '-0.02em', lineHeight: '44px' }}>
-        {value}
-      </div>
+      <span style={{
+        fontSize: 11,
+        fontWeight: 600,
+        letterSpacing: '0.06em',
+        textTransform: 'uppercase',
+        color: 'var(--text-muted)',
+      }}>{label}</span>
+      <span style={{
+        fontSize: 28,
+        fontWeight: 700,
+        letterSpacing: '-0.02em',
+        lineHeight: 1.1,
+        color: 'var(--text-primary)',
+      }}>{value}</span>
+      {sub && (
+        <span style={{ fontSize: 12, color: 'var(--text-secondary)' }}>{sub}</span>
+      )}
       {children}
     </div>
   );

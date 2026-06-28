@@ -1,29 +1,45 @@
-export default function DonutChart({ pct = 0, size = 192, label = 'Win Ratio' }) {
-  // pct = win%, remainder shown as loss
-  const lossPct = Math.max(0, 100 - pct - 17); // ~17% loss portion shown in red
-  const neutralPct = Math.max(0, 100 - pct - lossPct);
+const RADIUS = 52;
+const CIRC = 2 * Math.PI * RADIUS;
 
-  const conicStyle = {
-    background: `conic-gradient(from 180deg, #3fe56c 0% ${pct}%, #ffb4ab ${pct}% ${pct + 17}%, #2d363e ${pct + 17}% 100%)`,
-    width: size, height: size, borderRadius: '50%',
-    display: 'flex', alignItems: 'center', justifyContent: 'center',
-    position: 'relative',
-  };
+export default function DonutChart({ pct = 0, size = 140, label = 'Win Rate' }) {
+  const clampedPct = Math.min(100, Math.max(0, pct));
+  const fill = (clampedPct / 100) * CIRC;
+  const gap  = CIRC - fill;
+  const cx = size / 2;
+  const cy = size / 2;
+  const r = (size / 2) * 0.74;
+  const circ = 2 * Math.PI * r;
+  const strokeFill = (clampedPct / 100) * circ;
 
   return (
-    <div className="donut-glow" style={conicStyle}>
+    <div style={{ position: 'relative', width: size, height: size }}>
+      <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`} style={{ transform: 'rotate(-90deg)' }}>
+        <circle
+          cx={cx} cy={cy} r={r}
+          fill="none"
+          stroke="var(--track)"
+          strokeWidth={size * 0.08}
+        />
+        <circle
+          cx={cx} cy={cy} r={r}
+          fill="none"
+          stroke="var(--green)"
+          strokeWidth={size * 0.08}
+          strokeDasharray={`${strokeFill} ${circ - strokeFill}`}
+          strokeLinecap="round"
+          style={{ transition: 'stroke-dasharray 0.8s ease-out' }}
+        />
+      </svg>
       <div style={{
-        position: 'absolute',
-        inset: 8,
-        background: '#182028',
-        borderRadius: '50%',
-        display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
+        position: 'absolute', inset: 0,
+        display: 'flex', flexDirection: 'column',
+        alignItems: 'center', justifyContent: 'center',
       }}>
-        <span style={{ fontSize: 12, fontWeight: 600, letterSpacing: '0.05em', color: '#bbcbb8', textTransform: 'uppercase' }}>
+        <span style={{ fontSize: 10, fontWeight: 600, letterSpacing: '0.06em', color: 'var(--text-muted)', textTransform: 'uppercase' }}>
           {label}
         </span>
-        <span style={{ fontSize: 32, fontWeight: 700, color: '#dae3ee', lineHeight: 1, marginTop: 4 }}>
-          {pct}%
+        <span style={{ fontSize: size * 0.22, fontWeight: 700, color: 'var(--text-primary)', lineHeight: 1.1 }}>
+          {clampedPct}%
         </span>
       </div>
     </div>
