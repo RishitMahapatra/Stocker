@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Stocker - Portfolio</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+    tailwind.config = {
+        darkMode: "class",
+        theme: {
+            extend: {
+                "colors": {
+                    "primary": "#3fe56c",
+                    "on-tertiary-container": "#583b00",
+                    "tertiary-fixed": "#ffdeac",
+                    "on-tertiary-fixed": "#281900",
+                    "on-primary-fixed-variant": "#00531e",
+                    "primary-container": "#00c853",
+                    "on-tertiary": "#432c00",
+                    "surface-container-low": "#141c24",
+                    "on-primary-container": "#004c1b",
+                    "inverse-surface": "#dae3ee",
+                    "on-surface": "#dae3ee",
+                    "error": "#ffb4ab",
+                    "on-primary": "#003912",
+                    "inverse-primary": "#006e2a",
+                    "on-surface-variant": "#bbcbb8",
+                    "on-tertiary-fixed-variant": "#604100",
+                    "on-secondary": "#621100",
+                    "on-background": "#dae3ee",
+                    "tertiary-fixed-dim": "#ffba38",
+                    "on-error": "#690005",
+                    "surface-variant": "#2d363e",
+                    "on-primary-fixed": "#002108",
+                    "on-secondary-fixed": "#3c0700",
+                    "outline-variant": "#3c4a3c",
+                    "surface": "#0b141c",
+                    "secondary-fixed": "#ffdad2",
+                    "tertiary-container": "#e5a000",
+                    "outline": "#869583",
+                    "tertiary": "#ffbd45",
+                    "on-secondary-fixed-variant": "#8a1d00",
+                    "surface-tint": "#3ce36a",
+                    "surface-container": "#182028",
+                    "secondary-fixed-dim": "#ffb4a2",
+                    "surface-container-lowest": "#060f16",
+                    "primary-fixed": "#69ff87",
+                    "secondary": "#ffb4a2",
+                    "on-secondary-container": "#560e00",
+                    "secondary-container": "#ff562c",
+                    "surface-bright": "#313a43",
+                    "surface-container-highest": "#2d363e",
+                    "surface-dim": "#0b141c",
+                    "surface-container-high": "#222b33",
+                    "inverse-on-surface": "#29313a",
+                    "on-error-container": "#ffdad6",
+                    "error-container": "#93000a",
+                    "primary-fixed-dim": "#3ce36a",
+                    "background": "#0b141c"
+                },
+                "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+                },
+                "spacing": {
+                    "container-margin": "24px",
+                    "card-padding": "20px",
+                    "gap-xs": "4px",
+                    "gap-lg": "32px",
+                    "gap-sm": "8px",
+                    "gap-md": "16px"
+                },
+                "fontFamily": {
+                    "label-md": ["Inter", "sans-serif"],
+                    "number-xl": ["Inter", "sans-serif"],
+                    "body-sm": ["Inter", "sans-serif"],
+                    "headline-md": ["Inter", "sans-serif"],
+                    "headline-lg-mobile": ["Inter", "sans-serif"],
+                    "display-lg": ["Inter", "sans-serif"],
+                    "body-md": ["Inter", "sans-serif"],
+                    "headline-lg": ["Inter", "sans-serif"],
+                    "body-lg": ["Inter", "sans-serif"]
+                },
+                "fontSize": {
+                    "label-md": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                    "number-xl": ["36px", {"lineHeight": "44px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "body-sm": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                    "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                    "headline-lg-mobile": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                    "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                    "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}]
+                }
+            }
+        }
+    }
+</script>
+<style>
+    .material-symbols-outlined {
+        font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+    }
+    .icon-fill {
+        font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+    }
+
+    /* ── Gradient mesh background ── */
+    body {
+        background-color: #0b141c;
+        background-image:
+            radial-gradient(ellipse 70% 45% at 10% -5%, rgba(0,200,83,0.06) 0%, transparent 55%),
+            radial-gradient(ellipse 55% 40% at 90% 110%, rgba(63,229,108,0.04) 0%, transparent 55%);
+    }
+
+    /* ── Navbar glow ── */
+    nav {
+        box-shadow: 0 1px 0 rgba(63,229,108,0.12), 0 4px 24px rgba(0,0,0,0.4);
+    }
+
+    /* ── Glass panel ── */
+    .glass-panel {
+        background: rgba(22, 27, 34, 0.6);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    /* ── Market status pill ── */
+    .market-pill {
+        display: inline-flex; align-items: center; gap: 6px;
+        background: rgba(0,200,83,0.08);
+        border: 1px solid rgba(0,200,83,0.25);
+        border-radius: 9999px;
+        padding: 4px 12px;
+        box-shadow: 0 0 12px rgba(0,200,83,0.1);
+    }
+
+    /* ── Pulse dot ── */
+    @keyframes pulse-glow {
+        0%, 100% { box-shadow: 0 0 4px rgba(0,200,83,0.6); opacity: 1; }
+        50%       { box-shadow: 0 0 12px rgba(0,200,83,0.9); opacity: 0.7; }
+    }
+    .pulse-dot {
+        width: 8px; height: 8px; border-radius: 50%;
+        background: #00C853;
+        animation: pulse-glow 2s ease-in-out infinite;
+        display: inline-block; flex-shrink: 0;
+    }
+
+    /* ── P&L glow ── */
+    .pnl-gain { text-shadow: 0 0 14px rgba(0,200,83,0.55), 0 0 28px rgba(0,200,83,0.2); }
+    .pnl-loss { text-shadow: 0 0 12px rgba(255,100,0,0.45), 0 0 24px rgba(255,61,0,0.15); }
+
+    /* ── Table row green-left hover ── */
+    .pos-row {
+        border-left: 2px solid transparent;
+        transition: background-color 0.15s ease, border-color 0.15s ease;
+    }
+    .pos-row:hover {
+        background-color: rgba(0,200,83,0.04);
+        border-left-color: #00C853;
+    }
+
+    /* ── Donut glow ── */
+    .donut-glow {
+        filter: drop-shadow(0 0 10px rgba(63,229,108,0.35)) drop-shadow(0 0 20px rgba(0,200,83,0.15));
+    }
+
+    /* ── Trade reason pill shadows ── */
+    .pill-target {
+        background-color: rgba(0,200,83,0.15);
+        color: #00C853;
+        border: 1px solid rgba(0,200,83,0.3);
+        box-shadow: 0 0 8px rgba(0,200,83,0.2);
+    }
+    .pill-stoploss {
+        background-color: rgba(255,100,0,0.15);
+        color: #ffb4ab;
+        border: 1px solid rgba(255,61,0,0.3);
+        box-shadow: 0 0 8px rgba(255,61,0,0.18);
+    }
+    .pill-manual {
+        background-color: #21262D;
+        color: #bbcbb8;
+        border: 1px solid #3c4a3c;
+    }
+
+    /* ── Page fade-in ── */
+    @keyframes fadeInUp {
+        from { opacity: 0; transform: translateY(10px); }
+        to   { opacity: 1; transform: translateY(0); }
+    }
+    .fade-in { animation: fadeInUp 0.5s ease both; }
+
+    /* ── Score bar ── */
+    .score-bar-fill {
+        transition: width 1s cubic-bezier(0.4,0,0.2,1);
+        width: 0;
+    }
+</style>
+</head>
+<body class="text-on-surface font-body-md antialiased min-h-screen flex flex-col">
+<!-- TopNavBar -->
+<nav class="bg-surface dark:bg-surface border-b border-outline-variant sticky top-0 z-50">
+<div class="flex justify-between items-center w-full px-container-margin py-4 max-w-full mx-auto">
+<div class="flex items-center gap-md">
+<span class="text-headline-lg font-headline-lg font-bold text-on-surface dark:text-on-surface tracking-tighter">STOCKER</span>
+</div>
+<div class="hidden md:flex items-center gap-lg">
+<a class="text-on-surface-variant dark:text-on-surface-variant font-label-md text-label-md hover:bg-white/5 hover:text-on-surface transition-colors px-2 py-1 rounded" href="#">Dashboard</a>
+<a class="text-on-surface-variant dark:text-on-surface-variant font-label-md text-label-md hover:bg-white/5 hover:text-on-surface transition-colors px-2 py-1 rounded" href="#">Signals</a>
+<a class="text-primary dark:text-primary-fixed-dim border-b-2 border-primary dark:border-primary-fixed-dim pb-1 font-label-md text-label-md hover:bg-white/5 transition-colors px-2 rounded-t" href="#">Portfolio</a>
+<a class="text-on-surface-variant dark:text-on-surface-variant font-label-md text-label-md hover:bg-white/5 hover:text-on-surface transition-colors px-2 py-1 rounded" href="#">Analytics</a>
+</div>
+<div class="flex items-center gap-md">
+<div class="hidden sm:flex market-pill">
+<span class="pulse-dot"></span>
+<span class="font-label-md text-label-md text-on-surface-variant">Market Open</span>
+</div>
+<button class="p-2 rounded-full hover:bg-white/5 transition-colors text-on-surface-variant flex items-center justify-center">
+<span class="material-symbols-outlined">schedule</span>
+</button>
+<div class="w-10 h-10 rounded-full bg-surface-container-high border border-outline flex items-center justify-center overflow-hidden ml-2">
+<span class="material-symbols-outlined text-on-surface-variant">person</span>
+</div>
+</div>
+</div>
+</nav>
+<!-- Main Content Canvas -->
+<main class="flex-grow w-full max-w-[1600px] mx-auto px-container-margin py-8 flex flex-col gap-lg fade-in">
+<!-- Header -->
+<header class="flex justify-between items-end">
+<div>
+<h1 class="font-headline-lg text-headline-lg text-on-surface tracking-tight">Portfolio Overview</h1>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-1">Real-time performance and active positions</p>
+</div>
+<button class="bg-primary/10 text-primary border border-primary/30 hover:bg-primary/20 px-4 py-2 rounded-lg font-label-md text-label-md transition-colors flex items-center gap-xs">
+<span class="material-symbols-outlined text-[18px]">download</span>
+Export Report
+</button>
+</header>
+<!-- TOP: 4 Summary Cards -->
+<section class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-md">
+<!-- Card 1 -->
+<div class="bg-surface-container rounded-lg p-card-padding border border-outline-variant flex flex-col justify-between h-32 relative overflow-hidden group transition-colors hover:border-outline">
+<div class="absolute inset-0 bg-gradient-to-br from-white/[0.02] to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+<div class="flex justify-between items-start z-10">
+<span class="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider">Total Capital</span>
+<span class="material-symbols-outlined text-on-surface-variant/50">account_balance</span>
+</div>
+<div class="z-10">
+<span class="font-number-xl text-number-xl text-on-surface block tracking-tight">₹10,00,000</span>
+</div>
+</div>
+<!-- Card 2 -->
+<div class="bg-surface-container rounded-lg p-card-padding border border-outline-variant flex flex-col justify-between h-32 relative overflow-hidden group transition-colors hover:border-outline">
+<div class="absolute inset-0 bg-gradient-to-br from-white/[0.02] to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+<div class="flex justify-between items-start z-10">
+<span class="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider">Deployed</span>
+<span class="material-symbols-outlined text-on-surface-variant/50">play_arrow</span>
+</div>
+<div class="flex items-end gap-md z-10">
+<span class="font-number-xl text-number-xl text-on-surface tracking-tight">₹1,20,000</span>
+<span class="font-label-md text-label-md text-on-surface-variant mb-2 bg-surface-container-high px-2 py-0.5 rounded">(12%)</span>
+</div>
+</div>
+<!-- Card 3: P&L -->
+<div class="bg-surface-container rounded-lg p-card-padding border border-outline-variant flex flex-col justify-between h-32 relative overflow-hidden group transition-colors hover:border-primary/30">
+<div class="absolute inset-0 bg-gradient-to-br from-primary/[0.03] to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+<div class="flex justify-between items-start z-10">
+<span class="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider">Total P&amp;L</span>
+<span class="material-symbols-outlined text-primary/50">trending_up</span>
+</div>
+<div class="z-10 flex items-center gap-sm">
+<span class="font-number-xl text-number-xl text-primary tracking-tight pnl-gain">+₹12,450</span>
+<span class="material-symbols-outlined text-primary text-[24px]">arrow_upward</span>
+</div>
+</div>
+<!-- Card 4 -->
+<div class="bg-surface-container rounded-lg p-card-padding border border-outline-variant flex flex-col justify-between h-32 relative overflow-hidden group transition-colors hover:border-outline">
+<div class="absolute inset-0 bg-gradient-to-br from-white/[0.02] to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+<div class="flex justify-between items-start z-10">
+<span class="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider">Win Rate</span>
+<span class="material-symbols-outlined text-on-surface-variant/50">pie_chart</span>
+</div>
+<div class="z-10 flex items-center gap-md">
+<span class="font-number-xl text-number-xl text-on-surface tracking-tight">68%</span>
+<div class="flex-grow h-1.5 bg-surface-container-highest rounded-full overflow-hidden max-w-[80px]">
+<div class="h-full bg-primary score-bar-fill" data-width="68"></div>
+</div>
+</div>
+</div>
+</section>
+<!-- MIDDLE: Open Positions (60%) & Performance Panel (40%) -->
+<section class="grid grid-cols-1 lg:grid-cols-12 gap-lg">
+<!-- Left: Open Positions Table -->
+<div class="lg:col-span-8 bg-surface-container rounded-xl border border-outline-variant overflow-hidden flex flex-col">
+<div class="px-card-padding py-4 border-b border-outline-variant flex justify-between items-center bg-surface-container-low">
+<h2 class="font-headline-md text-[18px] text-on-surface flex items-center gap-sm">
+<span class="material-symbols-outlined text-on-surface-variant">list_alt</span>
+Open Positions
+</h2>
+<span class="bg-surface-container-highest text-on-surface-variant font-label-md text-label-md px-2 py-1 rounded-full">4 Active</span>
+</div>
+<div class="overflow-x-auto flex-grow">
+<table class="w-full text-left border-collapse min-w-[800px]">
+<thead>
+<tr class="bg-surface-container-highest/50 border-b border-outline-variant">
+<th class="py-3 px-4 font-label-md text-label-md text-on-surface-variant font-medium">Ticker</th>
+<th class="py-3 px-4 font-label-md text-label-md text-on-surface-variant font-medium text-right">Qty</th>
+<th class="py-3 px-4 font-label-md text-label-md text-on-surface-variant font-medium text-right">Entry</th>
+<th class="py-3 px-4 font-label-md text-label-md text-on-surface-variant font-medium text-right">Current</th>
+<th class="py-3 px-4 font-label-md text-label-md text-on-surface-variant font-medium text-right">Unrealized P&amp;L</th>
+<th class="py-3 px-4 font-label-md text-label-md text-on-surface-variant font-medium text-right">Stop Loss</th>
+<th class="py-3 px-4 font-label-md text-label-md text-on-surface-variant font-medium text-center">Days Held</th>
+<th class="py-3 px-4 font-label-md text-label-md text-on-surface-variant font-medium text-center">Action</th>
+</tr>
+</thead>
+<tbody class="font-body-sm text-body-sm">
+<!-- Row 1 -->
+<tr class="border-b border-outline-variant pos-row transition-colors group">
+<td class="py-4 px-4">
+<div class="flex items-center gap-xs">
+<div class="w-2 h-2 rounded-full bg-primary/20 border border-primary/50"></div>
+<span class="font-semibold text-on-surface">RELIANCE</span>
+</div>
+</td>
+<td class="py-4 px-4 text-right">50</td>
+<td class="py-4 px-4 text-right text-on-surface-variant">₹2,450.00</td>
+<td class="py-4 px-4 text-right">₹2,510.50</td>
+<td class="py-4 px-4 text-right text-primary font-medium flex items-center justify-end gap-xs pnl-gain">
+<span class="material-symbols-outlined text-[14px]">arrow_upward</span>
++₹3,025.00
+</td>
+<td class="py-4 px-4 text-right text-error/80">₹2,380.00</td>
+<td class="py-4 px-4 text-center text-on-surface-variant">4</td>
+<td class="py-4 px-4 text-center">
+<button class="bg-surface-container-high hover:bg-surface-bright text-on-surface-variant hover:text-on-surface border border-outline-variant px-3 py-1 rounded font-label-md text-label-md transition-colors opacity-0 group-hover:opacity-100 focus:opacity-100">
+Close
+</button>
+</td>
+</tr>
+<!-- Row 2 -->
+<tr class="border-b border-outline-variant pos-row transition-colors group">
+<td class="py-4 px-4">
+<div class="flex items-center gap-xs">
+<div class="w-2 h-2 rounded-full bg-error/20 border border-error/50"></div>
+<span class="font-semibold text-on-surface">HDFCBANK</span>
+</div>
+</td>
+<td class="py-4 px-4 text-right">100</td>
+<td class="py-4 px-4 text-right text-on-surface-variant">₹1,620.00</td>
+<td class="py-4 px-4 text-right">₹1,595.00</td>
+<td class="py-4 px-4 text-right text-error font-medium flex items-center justify-end gap-xs pnl-loss">
+<span class="material-symbols-outlined text-[14px]">arrow_downward</span>
+-₹2,500.00
+</td>
+<td class="py-4 px-4 text-right text-error/80">₹1,550.00</td>
+<td class="py-4 px-4 text-center text-on-surface-variant">2</td>
+<td class="py-4 px-4 text-center">
+<button class="bg-surface-container-high hover:bg-surface-bright text-on-surface-variant hover:text-on-surface border border-outline-variant px-3 py-1 rounded font-label-md text-label-md transition-colors opacity-0 group-hover:opacity-100 focus:opacity-100">
+Close
+</button>
+</td>
+</tr>
+<!-- Row 3 -->
+<tr class="border-b border-outline-variant pos-row transition-colors group">
+<td class="py-4 px-4">
+<div class="flex items-center gap-xs">
+<div class="w-2 h-2 rounded-full bg-primary/20 border border-primary/50"></div>
+<span class="font-semibold text-on-surface">INFY</span>
+</div>
+</td>
+<td class="py-4 px-4 text-right">75</td>
+<td class="py-4 px-4 text-right text-on-surface-variant">₹1,410.00</td>
+<td class="py-4 px-4 text-right">₹1,445.20</td>
+<td class="py-4 px-4 text-right text-primary font-medium flex items-center justify-end gap-xs pnl-gain">
+<span class="material-symbols-outlined text-[14px]">arrow_upward</span>
++₹2,640.00
+</td>
+<td class="py-4 px-4 text-right text-error/80">₹1,380.00</td>
+<td class="py-4 px-4 text-center text-on-surface-variant">12</td>
+<td class="py-4 px-4 text-center">
+<button class="bg-surface-container-high hover:bg-surface-bright text-on-surface-variant hover:text-on-surface border border-outline-variant px-3 py-1 rounded font-label-md text-label-md transition-colors opacity-0 group-hover:opacity-100 focus:opacity-100">
+Close
+</button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<!-- Right: Performance Panel -->
+<div class="lg:col-span-4 bg-surface-container rounded-xl border border-outline-variant overflow-hidden flex flex-col">
+<div class="px-card-padding py-4 border-b border-outline-variant bg-surface-container-low">
+<h2 class="font-headline-md text-[18px] text-on-surface flex items-center gap-sm">
+<span class="material-symbols-outlined text-on-surface-variant">donut_large</span>
+Performance
+</h2>
+</div>
+<div class="p-card-padding flex-grow flex flex-col items-center justify-center gap-lg">
+<!-- Donut Chart with glow -->
+<div class="donut-glow relative w-48 h-48 rounded-full flex items-center justify-center" style="background: conic-gradient(from 180deg, #3fe56c 0% 68%, #ffb4ab 68% 85%, #2d363e 85% 100%);">
+<div class="absolute inset-2 bg-surface-container rounded-full flex flex-col items-center justify-center shadow-inner">
+<span class="font-label-md text-label-md text-on-surface-variant uppercase">Win Ratio</span>
+<span class="font-number-xl text-[32px] font-bold text-on-surface leading-none mt-1">68%</span>
+</div>
+</div>
+<!-- Stats Grid -->
+<div class="w-full grid grid-cols-2 gap-md mt-4">
+<div class="bg-surface-container-high rounded-lg p-3 border border-outline-variant/50">
+<span class="block font-label-md text-[10px] text-on-surface-variant uppercase mb-1">Best Trade</span>
+<span class="block font-body-md text-primary font-medium pnl-gain">+₹8,450</span>
+<span class="block font-label-md text-[10px] text-on-surface-variant mt-0.5">TCS (Options)</span>
+</div>
+<div class="bg-surface-container-high rounded-lg p-3 border border-outline-variant/50">
+<span class="block font-label-md text-[10px] text-on-surface-variant uppercase mb-1">Worst Trade</span>
+<span class="block font-body-md text-error font-medium pnl-loss">-₹4,200</span>
+<span class="block font-label-md text-[10px] text-on-surface-variant mt-0.5">WIPRO (Cash)</span>
+</div>
+<div class="bg-surface-container-high rounded-lg p-3 border border-outline-variant/50 col-span-2 flex justify-between items-center">
+<div>
+<span class="block font-label-md text-[10px] text-on-surface-variant uppercase mb-1">Avg P&amp;L / Trade</span>
+<span class="block font-body-md text-on-surface font-medium">+₹1,245</span>
+</div>
+<div class="w-12 h-6 bg-surface-container-highest rounded-full overflow-hidden flex items-end">
+<div class="w-1/4 h-[30%] bg-primary/40 rounded-t-sm mx-px"></div>
+<div class="w-1/4 h-[70%] bg-primary/70 rounded-t-sm mx-px"></div>
+<div class="w-1/4 h-[40%] bg-error/70 rounded-t-sm mx-px"></div>
+<div class="w-1/4 h-[90%] bg-primary rounded-t-sm mx-px"></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- BOTTOM: Trade History Table -->
+<section class="bg-surface-container rounded-xl border border-outline-variant overflow-hidden mt-4">
+<div class="px-card-padding py-4 border-b border-outline-variant flex justify-between items-center bg-surface-container-low">
+<h2 class="font-headline-md text-[18px] text-on-surface flex items-center gap-sm">
+<span class="material-symbols-outlined text-on-surface-variant">history</span>
+Trade History
+</h2>
+<div class="flex gap-sm">
+<button class="bg-surface-container-high border border-outline-variant text-on-surface-variant px-3 py-1.5 rounded font-label-md text-label-md hover:bg-white/5 transition-colors flex items-center gap-xs">
+<span class="material-symbols-outlined text-[16px]">filter_list</span>
+Filter
+</button>
+</div>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse min-w-[1000px]">
+<thead>
+<tr class="bg-surface-container-highest/50 border-b border-outline-variant">
+<th class="py-3 px-4 font-label-md text-label-md text-on-surface-variant font-medium">Date</th>
+<th class="py-3 px-4 font-label-md text-label-md text-on-surface-variant font-medium">Ticker</th>
+<th class="py-3 px-4 font-label-md text-label-md text-on-surface-variant font-medium">Action</th>
+<th class="py-3 px-4 font-label-md text-label-md text-on-surface-variant font-medium text-right">Entry</th>
+<th class="py-3 px-4 font-label-md text-label-md text-on-surface-variant font-medium text-right">Exit</th>
+<th class="py-3 px-4 font-label-md text-label-md text-on-surface-variant font-medium text-right">P&amp;L</th>
+<th class="py-3 px-4 font-label-md text-label-md text-on-surface-variant font-medium text-right">P&amp;L %</th>
+<th class="py-3 px-4 font-label-md text-label-md text-on-surface-variant font-medium text-center">Reason</th>
+</tr>
+</thead>
+<tbody class="font-body-sm text-body-sm">
+<!-- History Row 1 -->
+<tr class="border-b border-outline-variant pos-row transition-colors">
+<td class="py-4 px-4 text-on-surface-variant">Oct 24, 14:30</td>
+<td class="py-4 px-4 font-semibold text-on-surface">TCS</td>
+<td class="py-4 px-4"><span class="text-primary font-medium">BUY</span></td>
+<td class="py-4 px-4 text-right text-on-surface-variant">₹3,400.00</td>
+<td class="py-4 px-4 text-right text-on-surface">₹3,485.00</td>
+<td class="py-4 px-4 text-right text-primary font-medium pnl-gain">+₹8,500.00</td>
+<td class="py-4 px-4 text-right text-primary pnl-gain">+2.50%</td>
+<td class="py-4 px-4 text-center">
+<span class="inline-block pill-target rounded-full px-2 py-0.5 font-label-md text-[10px] tracking-wide">TARGET</span>
+</td>
+</tr>
+<!-- History Row 2 -->
+<tr class="border-b border-outline-variant pos-row transition-colors">
+<td class="py-4 px-4 text-on-surface-variant">Oct 23, 10:15</td>
+<td class="py-4 px-4 font-semibold text-on-surface">ICICIBANK</td>
+<td class="py-4 px-4"><span class="text-error font-medium">SHORT</span></td>
+<td class="py-4 px-4 text-right text-on-surface-variant">₹950.00</td>
+<td class="py-4 px-4 text-right text-on-surface">₹965.00</td>
+<td class="py-4 px-4 text-right text-error font-medium pnl-loss">-₹1,500.00</td>
+<td class="py-4 px-4 text-right text-error pnl-loss">-1.57%</td>
+<td class="py-4 px-4 text-center">
+<span class="inline-block pill-stoploss rounded-full px-2 py-0.5 font-label-md text-[10px] tracking-wide">STOP_LOSS</span>
+</td>
+</tr>
+<!-- History Row 3 -->
+<tr class="border-b border-outline-variant pos-row transition-colors">
+<td class="py-4 px-4 text-on-surface-variant">Oct 21, 15:20</td>
+<td class="py-4 px-4 font-semibold text-on-surface">SBIN</td>
+<td class="py-4 px-4"><span class="text-primary font-medium">BUY</span></td>
+<td class="py-4 px-4 text-right text-on-surface-variant">₹580.00</td>
+<td class="py-4 px-4 text-right text-on-surface">₹592.00</td>
+<td class="py-4 px-4 text-right text-primary font-medium pnl-gain">+₹2,400.00</td>
+<td class="py-4 px-4 text-right text-primary pnl-gain">+2.06%</td>
+<td class="py-4 px-4 text-center">
+<span class="inline-block pill-manual rounded-full px-2 py-0.5 font-label-md text-[10px] tracking-wide">MANUAL</span>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="p-4 border-t border-outline-variant flex justify-center">
+<button class="text-on-surface-variant font-label-md text-label-md hover:text-on-surface transition-colors flex items-center gap-xs">
+Load More <span class="material-symbols-outlined text-[18px]">expand_more</span>
+</button>
+</div>
+</section>
+</main>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        requestAnimationFrame(() => {
+            document.querySelectorAll('.score-bar-fill[data-width]').forEach(el => {
+                el.style.width = el.dataset.width + '%';
+            });
+        });
+    });
+</script>
+</body></html>

@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Stocker - Dashboard</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+</style>
+<script id="tailwind-config">
+    tailwind.config = {
+        darkMode: "class",
+        theme: {
+            extend: {
+                "colors": {
+                    "primary": "#3fe56c",
+                    "on-tertiary-container": "#583b00",
+                    "tertiary-fixed": "#ffdeac",
+                    "on-tertiary-fixed": "#281900",
+                    "on-primary-fixed-variant": "#00531e",
+                    "primary-container": "#00c853",
+                    "on-tertiary": "#432c00",
+                    "surface-container-low": "#141c24",
+                    "on-primary-container": "#004c1b",
+                    "inverse-surface": "#dae3ee",
+                    "on-surface": "#dae3ee",
+                    "error": "#ffb4ab",
+                    "on-primary": "#003912",
+                    "inverse-primary": "#006e2a",
+                    "on-surface-variant": "#bbcbb8",
+                    "on-tertiary-fixed-variant": "#604100",
+                    "on-secondary": "#621100",
+                    "on-background": "#dae3ee",
+                    "tertiary-fixed-dim": "#ffba38",
+                    "on-error": "#690005",
+                    "surface-variant": "#2d363e",
+                    "on-primary-fixed": "#002108",
+                    "on-secondary-fixed": "#3c0700",
+                    "outline-variant": "#3c4a3c",
+                    "surface": "#0b141c",
+                    "secondary-fixed": "#ffdad2",
+                    "tertiary-container": "#e5a000",
+                    "outline": "#869583",
+                    "tertiary": "#ffbd45",
+                    "on-secondary-fixed-variant": "#8a1d00",
+                    "surface-tint": "#3ce36a",
+                    "surface-container": "#182028",
+                    "secondary-fixed-dim": "#ffb4a2",
+                    "surface-container-lowest": "#060f16",
+                    "primary-fixed": "#69ff87",
+                    "secondary": "#ffb4a2",
+                    "on-secondary-container": "#560e00",
+                    "secondary-container": "#ff562c",
+                    "surface-bright": "#313a43",
+                    "surface-container-highest": "#2d363e",
+                    "surface-dim": "#0b141c",
+                    "surface-container-high": "#222b33",
+                    "inverse-on-surface": "#29313a",
+                    "on-error-container": "#ffdad6",
+                    "error-container": "#93000a",
+                    "primary-fixed-dim": "#3ce36a",
+                    "background": "#0b141c"
+                },
+                "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+                },
+                "spacing": {
+                    "container-margin": "24px",
+                    "card-padding": "20px",
+                    "gap-xs": "4px",
+                    "gap-lg": "32px",
+                    "gap-sm": "8px",
+                    "gap-md": "16px"
+                },
+                "fontFamily": {
+                    "label-md": ["Inter"],
+                    "number-xl": ["Inter"],
+                    "body-sm": ["Inter"],
+                    "headline-md": ["Inter"],
+                    "headline-lg-mobile": ["Inter"],
+                    "display-lg": ["Inter"],
+                    "body-md": ["Inter"],
+                    "headline-lg": ["Inter"],
+                    "body-lg": ["Inter"]
+                },
+                "fontSize": {
+                    "label-md": ["12px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600" }],
+                    "number-xl": ["36px", { "lineHeight": "44px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                    "body-sm": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+                    "headline-md": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+                    "headline-lg-mobile": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+                    "display-lg": ["48px", { "lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                    "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                    "headline-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+                    "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }]
+                }
+            }
+        }
+    }
+</script>
+<style>
+    /* ── Gradient mesh background ── */
+    body {
+        background-color: #0D1117;
+        background-image:
+            radial-gradient(ellipse 80% 50% at 20% -10%, rgba(0,200,83,0.07) 0%, transparent 60%),
+            radial-gradient(ellipse 60% 40% at 80% 110%, rgba(63,229,108,0.05) 0%, transparent 55%);
+    }
+
+    /* ── Navbar glow ── */
+    nav {
+        box-shadow: 0 1px 0 rgba(63,229,108,0.12), 0 4px 24px rgba(0,0,0,0.4);
+    }
+
+    /* ── Glass cards ── */
+    .glass-card {
+        background-color: #161B22;
+        backdrop-filter: blur(12px);
+        border: 1px solid rgba(255,255,255,0.08);
+        box-shadow: inset 0 0 0 1px rgba(255,255,255,0.04), 0 2px 16px rgba(0,0,0,0.3);
+        transition: box-shadow 0.2s ease, border-color 0.2s ease;
+    }
+    .glass-card:hover {
+        border-color: rgba(63,229,108,0.18);
+        box-shadow: inset 0 0 0 1px rgba(63,229,108,0.08), 0 4px 32px rgba(0,200,83,0.08);
+    }
+
+    /* ── Signal badges ── */
+    .signal-buy {
+        background-color: rgba(0,200,83,0.15);
+        color: #00C853;
+        border: 1px solid rgba(0,200,83,0.35);
+        box-shadow: 0 0 8px rgba(0,200,83,0.25);
+    }
+    .signal-sell {
+        background-color: rgba(255,61,0,0.15);
+        color: #FF3D00;
+        border: 1px solid rgba(255,61,0,0.35);
+        box-shadow: 0 0 8px rgba(255,61,0,0.2);
+    }
+
+    /* ── Score bars ── */
+    .score-track {
+        height: 6px;
+        background-color: #21262D;
+        border-radius: 9999px;
+        overflow: hidden;
+    }
+    .score-fill {
+        height: 100%;
+        border-radius: 9999px;
+        width: 0;
+        transition: width 1s cubic-bezier(0.4,0,0.2,1);
+    }
+
+    /* ── Table row hover with green left border ── */
+    .table-row-hover {
+        border-left: 2px solid transparent;
+        transition: background-color 0.15s ease, border-color 0.15s ease;
+    }
+    .table-row-hover:hover {
+        background-color: rgba(0,200,83,0.04);
+        border-left-color: #00C853;
+    }
+
+    /* ── Number glow ── */
+    .glow-green {
+        text-shadow: 0 0 16px rgba(0,200,83,0.5), 0 0 32px rgba(0,200,83,0.2);
+    }
+    .glow-win {
+        text-shadow: 0 0 14px rgba(63,229,108,0.45);
+    }
+
+    /* ── Donut glow ── */
+    .donut-glow {
+        filter: drop-shadow(0 0 8px rgba(0,200,83,0.35));
+    }
+
+    /* ── Market status pill ── */
+    .market-pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        background: rgba(0,200,83,0.08);
+        border: 1px solid rgba(0,200,83,0.25);
+        border-radius: 9999px;
+        padding: 4px 12px;
+        box-shadow: 0 0 12px rgba(0,200,83,0.1);
+    }
+
+    /* ── Pulse-glow dot ── */
+    @keyframes pulse-glow {
+        0%, 100% { box-shadow: 0 0 4px rgba(0,200,83,0.6); opacity: 1; }
+        50%       { box-shadow: 0 0 12px rgba(0,200,83,0.9); opacity: 0.7; }
+    }
+    .pulse-dot {
+        width: 8px; height: 8px;
+        border-radius: 50%;
+        background: #00C853;
+        animation: pulse-glow 2s ease-in-out infinite;
+        display: inline-block;
+        flex-shrink: 0;
+    }
+
+    /* ── Page + row fade-in ── */
+    @keyframes fadeInUp {
+        from { opacity: 0; transform: translateY(12px); }
+        to   { opacity: 1; transform: translateY(0); }
+    }
+    .fade-in-up { animation: fadeInUp 0.5s ease both; }
+    .delay-1 { animation-delay: 0.05s; }
+    .delay-2 { animation-delay: 0.10s; }
+    .delay-3 { animation-delay: 0.15s; }
+    .delay-4 { animation-delay: 0.20s; }
+
+    /* ── KPI card gradient top border ── */
+    .kpi-border-top {
+        border-top: 2px solid transparent;
+        background-clip: padding-box;
+        position: relative;
+    }
+    .kpi-border-top::before {
+        content: '';
+        position: absolute;
+        top: -2px; left: 0; right: 0;
+        height: 2px;
+        background: linear-gradient(90deg, #00C853, #3fe56c);
+        border-radius: 2px 2px 0 0;
+    }
+</style>
+</head>
+<body class="text-on-surface font-body-md min-h-screen">
+<!-- TopNavBar -->
+<nav class="bg-surface dark:bg-surface border-b border-outline-variant sticky top-0 z-50">
+<div class="flex justify-between items-center w-full px-container-margin py-4 max-w-full mx-auto">
+<div class="flex items-center gap-md">
+<img alt="Stocker Logo" class="w-8 h-8 rounded" src="data:image/png;base64,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"/>
+<div class="flex flex-col">
+<span class="text-headline-lg font-headline-lg font-bold text-on-surface dark:text-on-surface tracking-tight">STOCKER</span>
+<span class="text-label-md font-label-md text-on-surface-variant">Watch • Analyze • Decide</span>
+</div>
+</div>
+<div class="hidden md:flex gap-lg">
+<a class="text-primary dark:text-primary-fixed-dim border-b-2 border-primary dark:border-primary-fixed-dim pb-1 font-label-md text-label-md transition-colors hover:bg-white/5" href="#">Dashboard</a>
+<a class="text-on-surface-variant dark:text-on-surface-variant pb-1 font-label-md text-label-md transition-colors hover:bg-white/5 hover:text-on-surface" href="#">Signals</a>
+<a class="text-on-surface-variant dark:text-on-surface-variant pb-1 font-label-md text-label-md transition-colors hover:bg-white/5 hover:text-on-surface" href="#">Portfolio</a>
+<a class="text-on-surface-variant dark:text-on-surface-variant pb-1 font-label-md text-label-md transition-colors hover:bg-white/5 hover:text-on-surface" href="#">Analytics</a>
+</div>
+<div class="flex items-center gap-md">
+<div class="market-pill">
+<span class="pulse-dot"></span>
+<span class="text-label-md font-label-md text-on-surface">Market Open</span>
+</div>
+<span class="text-label-md font-label-md text-on-surface-variant flex items-center gap-xs ml-2">
+<span class="material-symbols-outlined text-[14px]">schedule</span> Updated 2 mins ago
+</span>
+</div>
+</div>
+</nav>
+<main class="p-container-margin max-w-7xl mx-auto flex flex-col gap-lg fade-in-up">
+<!-- Hero Strip: KPI Cards -->
+<div class="grid grid-cols-1 md:grid-cols-4 gap-md">
+<div class="glass-card rounded-lg p-card-padding flex flex-col gap-sm fade-in-up delay-1">
+<div class="flex justify-between items-center text-on-surface-variant">
+<span class="font-label-md text-label-md uppercase">Total Signals Today</span>
+<span class="material-symbols-outlined text-tertiary-container" style="font-variation-settings: 'FILL' 1;">bolt</span>
+</div>
+<div class="font-number-xl text-number-xl text-on-surface">10</div>
+</div>
+<div class="glass-card rounded-lg p-card-padding flex flex-col gap-sm kpi-border-top fade-in-up delay-2">
+<div class="flex justify-between items-center text-on-surface-variant">
+<span class="font-label-md text-label-md uppercase">BUY Signals</span>
+<span class="material-symbols-outlined text-primary-container">arrow_upward</span>
+</div>
+<div class="font-number-xl text-number-xl text-primary-container glow-green">4</div>
+</div>
+<div class="glass-card rounded-lg p-card-padding flex flex-col gap-sm fade-in-up delay-3">
+<div class="flex justify-between items-center text-on-surface-variant">
+<span class="font-label-md text-label-md uppercase">Portfolio P&amp;L</span>
+<span class="material-symbols-outlined text-primary-container">currency_rupee</span>
+</div>
+<div class="font-number-xl text-number-xl text-primary-container glow-green">+₹12,450</div>
+<div class="flex items-center gap-xs text-primary-container font-label-md text-label-md">
+<span class="material-symbols-outlined text-[14px]">trending_up</span> +2.4% Today
+</div>
+</div>
+<div class="glass-card rounded-lg p-card-padding flex flex-col gap-sm fade-in-up delay-4">
+<div class="flex justify-between items-center text-on-surface-variant">
+<span class="font-label-md text-label-md uppercase">Win Rate</span>
+<span class="material-symbols-outlined text-tertiary-container">emoji_events</span>
+</div>
+<div class="font-number-xl text-number-xl text-on-surface glow-win">68%</div>
+<div class="score-track mt-1">
+<div class="score-fill bg-tertiary-container" data-width="68"></div>
+</div>
+</div>
+</div>
+<!-- Main Content -->
+<div class="flex flex-col lg:flex-row gap-lg">
+<!-- Left: Signals Table (65%) -->
+<div class="lg:w-[65%] glass-card rounded-lg border border-[#21262D] overflow-hidden">
+<div class="p-card-padding border-b border-[#21262D] bg-[#161B22] flex items-center gap-sm">
+<span class="pulse-dot"></span>
+<h2 class="font-headline-md text-headline-md">Live Signals</h2>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left">
+<thead class="bg-[#161B22] border-b border-[#21262D]">
+<tr>
+<th class="p-card-padding font-label-md text-label-md text-on-surface-variant">Ticker</th>
+<th class="p-card-padding font-label-md text-label-md text-on-surface-variant">Price</th>
+<th class="p-card-padding font-label-md text-label-md text-on-surface-variant">Score</th>
+<th class="p-card-padding font-label-md text-label-md text-on-surface-variant">Signal</th>
+<th class="p-card-padding font-label-md text-label-md text-on-surface-variant">Tech / Sent / Fund</th>
+<th class="p-card-padding font-label-md text-label-md text-on-surface-variant text-right">Updated</th>
+</tr>
+</thead>
+<tbody>
+<tr class="border-b border-[#21262D] table-row-hover cursor-pointer transition-colors fade-in-up delay-1">
+<td class="p-card-padding font-label-md text-label-md text-on-surface">TCS.NS</td>
+<td class="p-card-padding font-body-sm text-body-sm">₹3,845.20</td>
+<td class="p-card-padding">
+<div class="flex items-center gap-sm w-24">
+<span class="font-label-md text-label-md text-primary-container">82</span>
+<div class="score-track flex-1">
+<div class="score-fill bg-primary-container" data-width="82"></div>
+</div>
+</div>
+</td>
+<td class="p-card-padding">
+<span class="signal-buy font-label-md text-label-md rounded-full px-3 py-1 flex items-center justify-center w-min">BUY</span>
+</td>
+<td class="p-card-padding">
+<div class="flex gap-xs">
+<div class="w-2 h-2 rounded-full bg-primary-container" title="Technical: Strong"></div>
+<div class="w-2 h-2 rounded-full bg-primary-container" title="Sentiment: Positive"></div>
+<div class="w-2 h-2 rounded-full bg-surface-variant" title="Fundamental: Neutral"></div>
+</div>
+</td>
+<td class="p-card-padding text-right font-body-sm text-body-sm text-on-surface-variant">Just now</td>
+</tr>
+<tr class="border-b border-[#21262D] table-row-hover cursor-pointer transition-colors fade-in-up delay-2">
+<td class="p-card-padding font-label-md text-label-md text-on-surface">RELIANCE.NS</td>
+<td class="p-card-padding font-body-sm text-body-sm">₹2,912.50</td>
+<td class="p-card-padding">
+<div class="flex items-center gap-sm w-24">
+<span class="font-label-md text-label-md text-error">34</span>
+<div class="score-track flex-1">
+<div class="score-fill bg-error" data-width="34"></div>
+</div>
+</div>
+</td>
+<td class="p-card-padding">
+<span class="signal-sell font-label-md text-label-md rounded-full px-3 py-1 flex items-center justify-center w-min">SELL</span>
+</td>
+<td class="p-card-padding">
+<div class="flex gap-xs">
+<div class="w-2 h-2 rounded-full bg-error" title="Technical: Weak"></div>
+<div class="w-2 h-2 rounded-full bg-surface-variant" title="Sentiment: Neutral"></div>
+<div class="w-2 h-2 rounded-full bg-error" title="Fundamental: Weak"></div>
+</div>
+</td>
+<td class="p-card-padding text-right font-body-sm text-body-sm text-on-surface-variant">5m ago</td>
+</tr>
+<tr class="table-row-hover cursor-pointer transition-colors fade-in-up delay-3">
+<td class="p-card-padding font-label-md text-label-md text-on-surface">INFOSYS.NS</td>
+<td class="p-card-padding font-body-sm text-body-sm">₹1,620.00</td>
+<td class="p-card-padding">
+<div class="flex items-center gap-sm w-24">
+<span class="font-label-md text-label-md text-primary-container">75</span>
+<div class="score-track flex-1">
+<div class="score-fill bg-primary-container" data-width="75"></div>
+</div>
+</div>
+</td>
+<td class="p-card-padding">
+<span class="signal-buy font-label-md text-label-md rounded-full px-3 py-1 flex items-center justify-center w-min">BUY</span>
+</td>
+<td class="p-card-padding">
+<div class="flex gap-xs">
+<div class="w-2 h-2 rounded-full bg-primary-container" title="Technical: Strong"></div>
+<div class="w-2 h-2 rounded-full bg-surface-variant" title="Sentiment: Neutral"></div>
+<div class="w-2 h-2 rounded-full bg-primary-container" title="Fundamental: Strong"></div>
+</div>
+</td>
+<td class="p-card-padding text-right font-body-sm text-body-sm text-on-surface-variant">12m ago</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<!-- Right: Portfolio Snapshot (35%) -->
+<div class="lg:w-[35%] flex flex-col gap-md">
+<div class="glass-card rounded-lg p-card-padding border border-[#21262D]">
+<h2 class="font-headline-md text-headline-md mb-md">Portfolio Snapshot</h2>
+<div class="flex items-center justify-center py-6 relative">
+<div class="donut-glow w-48 h-48 rounded-full border-8 border-surface-variant flex items-center justify-center relative">
+<svg class="w-full h-full transform -rotate-90" viewBox="0 0 36 36">
+<path class="text-surface-variant" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="currentColor" stroke-width="3"></path>
+<path class="text-primary-container" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="currentColor" stroke-dasharray="12, 100" stroke-width="3"></path>
+</svg>
+<div class="absolute flex flex-col items-center">
+<span class="font-label-md text-label-md text-on-surface-variant">Deployed</span>
+<span class="font-headline-lg text-headline-lg text-primary-container glow-green">12%</span>
+</div>
+</div>
+</div>
+<div class="flex justify-between items-center mt-sm pt-sm border-t border-[#21262D]">
+<div class="flex items-center gap-xs">
+<div class="w-3 h-3 rounded bg-surface-variant"></div>
+<span class="font-label-md text-label-md text-on-surface-variant">Available: 88%</span>
+</div>
+</div>
+</div>
+<div class="glass-card rounded-lg p-card-padding border border-[#21262D]">
+<h3 class="font-label-md text-label-md text-on-surface-variant mb-md uppercase">Open Positions</h3>
+<div class="flex flex-col gap-sm">
+<div class="bg-[#21262D] rounded p-3 flex justify-between items-center">
+<div class="flex flex-col">
+<span class="font-label-md text-label-md text-on-surface">HDFCBANK.NS</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">25 shares</span>
+</div>
+<div class="flex flex-col items-end">
+<span class="font-label-md text-label-md text-primary-container glow-green">+₹1,250</span>
+<span class="font-body-sm text-body-sm text-primary-container">+1.8%</span>
+</div>
+</div>
+<div class="bg-[#21262D] rounded p-3 flex justify-between items-center">
+<div class="flex flex-col">
+<span class="font-label-md text-label-md text-on-surface">ITC.NS</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">100 shares</span>
+</div>
+<div class="flex flex-col items-end">
+<span class="font-label-md text-label-md text-error">-₹320</span>
+<span class="font-body-sm text-body-sm text-error">-0.5%</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+<script>
+    // Animate score bars from data-width attribute
+    document.addEventListener('DOMContentLoaded', () => {
+        requestAnimationFrame(() => {
+            document.querySelectorAll('.score-fill[data-width]').forEach(el => {
+                el.style.width = el.dataset.width + '%';
+            });
+        });
+    });
+</script>
+</body></html>

@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Stocker - Signals</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+    tailwind.config = {
+        darkMode: "class",
+        theme: {
+            extend: {
+                "colors": {
+                    "primary": "#3fe56c",
+                    "on-tertiary-container": "#583b00",
+                    "tertiary-fixed": "#ffdeac",
+                    "on-tertiary-fixed": "#281900",
+                    "on-primary-fixed-variant": "#00531e",
+                    "primary-container": "#00c853",
+                    "on-tertiary": "#432c00",
+                    "surface-container-low": "#141c24",
+                    "on-primary-container": "#004c1b",
+                    "inverse-surface": "#dae3ee",
+                    "on-surface": "#dae3ee",
+                    "error": "#ffb4ab",
+                    "on-primary": "#003912",
+                    "inverse-primary": "#006e2a",
+                    "on-surface-variant": "#bbcbb8",
+                    "on-tertiary-fixed-variant": "#604100",
+                    "on-secondary": "#621100",
+                    "on-background": "#dae3ee",
+                    "tertiary-fixed-dim": "#ffba38",
+                    "on-error": "#690005",
+                    "surface-variant": "#2d363e",
+                    "on-primary-fixed": "#002108",
+                    "on-secondary-fixed": "#3c0700",
+                    "outline-variant": "#3c4a3c",
+                    "surface": "#0b141c",
+                    "secondary-fixed": "#ffdad2",
+                    "tertiary-container": "#e5a000",
+                    "outline": "#869583",
+                    "tertiary": "#ffbd45",
+                    "on-secondary-fixed-variant": "#8a1d00",
+                    "surface-tint": "#3ce36a",
+                    "surface-container": "#182028",
+                    "secondary-fixed-dim": "#ffb4a2",
+                    "surface-container-lowest": "#060f16",
+                    "primary-fixed": "#69ff87",
+                    "secondary": "#ffb4a2",
+                    "on-secondary-container": "#560e00",
+                    "secondary-container": "#ff562c",
+                    "surface-bright": "#313a43",
+                    "surface-container-highest": "#2d363e",
+                    "surface-dim": "#0b141c",
+                    "surface-container-high": "#222b33",
+                    "inverse-on-surface": "#29313a",
+                    "on-error-container": "#ffdad6",
+                    "error-container": "#93000a",
+                    "primary-fixed-dim": "#3ce36a",
+                    "background": "#0b141c"
+                },
+                "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+                },
+                "spacing": {
+                    "container-margin": "24px",
+                    "card-padding": "20px",
+                    "gap-xs": "4px",
+                    "gap-lg": "32px",
+                    "gap-sm": "8px",
+                    "gap-md": "16px"
+                },
+                "fontFamily": {
+                    "label-md": ["Inter"],
+                    "number-xl": ["Inter"],
+                    "body-sm": ["Inter"],
+                    "headline-md": ["Inter"],
+                    "headline-lg-mobile": ["Inter"],
+                    "display-lg": ["Inter"],
+                    "body-md": ["Inter"],
+                    "headline-lg": ["Inter"],
+                    "body-lg": ["Inter"]
+                },
+                "fontSize": {
+                    "label-md": ["12px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600" }],
+                    "number-xl": ["36px", { "lineHeight": "44px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                    "body-sm": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+                    "headline-md": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+                    "headline-lg-mobile": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+                    "display-lg": ["48px", { "lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                    "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                    "headline-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+                    "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }]
+                }
+            }
+        }
+    }
+</script>
+<style>
+    /* ── Gradient mesh background ── */
+    body {
+        background-color: #0D1117;
+        background-image:
+            radial-gradient(ellipse 70% 50% at 15% -5%, rgba(0,200,83,0.07) 0%, transparent 55%),
+            radial-gradient(ellipse 60% 40% at 85% 105%, rgba(63,229,108,0.05) 0%, transparent 55%);
+    }
+
+    /* ── Navbar glow ── */
+    nav {
+        box-shadow: 0 1px 0 rgba(63,229,108,0.12), 0 4px 24px rgba(0,0,0,0.4);
+    }
+
+    /* ── Glass cards ── */
+    .glass-card {
+        background-color: #161B22;
+        backdrop-filter: blur(12px);
+        border: 1px solid #21262D;
+        box-shadow: inset 0 0 0 1px rgba(255,255,255,0.04), 0 2px 16px rgba(0,0,0,0.3);
+        transition: box-shadow 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+    }
+    .glass-card:hover {
+        border-color: rgba(63,229,108,0.18);
+        box-shadow: inset 0 0 0 1px rgba(63,229,108,0.08), 0 8px 32px rgba(0,200,83,0.1);
+    }
+
+    /* ── Signal badges ── */
+    .signal-buy  { background-color: rgba(0,200,83,0.15);  color: #00C853; border: 1px solid rgba(0,200,83,0.35);  box-shadow: 0 0 8px rgba(0,200,83,0.3); }
+    .signal-sell { background-color: rgba(255,61,0,0.15);  color: #FF3D00; border: 1px solid rgba(255,61,0,0.35);  box-shadow: 0 0 8px rgba(255,61,0,0.25); }
+    .signal-hold { background-color: rgba(255,189,69,0.15); color: #ffbd45; border: 1px solid rgba(255,189,69,0.35); box-shadow: 0 0 6px rgba(255,189,69,0.2); }
+
+    /* ── Gauge glow ── */
+    .gauge-container { width: 120px; height: 60px; overflow: hidden; position: relative; margin: 0 auto; }
+    .gauge-bg { width: 120px; height: 120px; border-radius: 50%; border: 8px solid #21262D; position: absolute; top: 0; left: 0; box-sizing: border-box; }
+    .gauge-fill {
+        width: 120px; height: 120px; border-radius: 50%;
+        border: 8px solid;
+        border-top-color: transparent !important;
+        border-right-color: transparent !important;
+        position: absolute; top: 0; left: 0; box-sizing: border-box;
+        transform: rotate(-45deg);
+        transition: transform 1s ease-out;
+        filter: drop-shadow(0 0 6px currentColor);
+    }
+
+    /* ── Score bars ── */
+    .score-bar-fill {
+        height: 100%;
+        border-radius: 9999px;
+        width: 0;
+        transition: width 1s cubic-bezier(0.4,0,0.2,1);
+    }
+
+    /* ── Score number glow by threshold ── */
+    .score-num-high  { text-shadow: 0 0 14px rgba(0,200,83,0.6),  0 0 28px rgba(0,200,83,0.2); }
+    .score-num-low   { text-shadow: 0 0 12px rgba(255,100,0,0.5),  0 0 24px rgba(255,61,0,0.15); }
+    .score-num-mid   { text-shadow: 0 0 12px rgba(255,189,69,0.5); }
+
+    /* ── Filter pills ── */
+    .pill-active {
+        background: linear-gradient(135deg, rgba(0,200,83,0.25), rgba(63,229,108,0.12));
+        color: #00C853;
+        border: 1px solid rgba(0,200,83,0.4);
+        box-shadow: 0 0 10px rgba(0,200,83,0.2);
+    }
+    .pill-inactive {
+        background-color: #161B22;
+        color: #bbcbb8;
+        border: 1px solid #3c4a3c;
+        transition: background-color 0.15s, border-color 0.15s;
+    }
+    .pill-inactive:hover { background-color: rgba(255,255,255,0.05); border-color: rgba(63,229,108,0.2); color: #dae3ee; }
+
+    /* ── Market status pill ── */
+    .market-pill {
+        display: inline-flex; align-items: center; gap: 6px;
+        background: rgba(0,200,83,0.08);
+        border: 1px solid rgba(0,200,83,0.25);
+        border-radius: 9999px;
+        padding: 4px 12px;
+        box-shadow: 0 0 12px rgba(0,200,83,0.1);
+    }
+
+    /* ── Pulse dot ── */
+    @keyframes pulse-glow {
+        0%, 100% { box-shadow: 0 0 4px rgba(0,200,83,0.6); opacity: 1; }
+        50%       { box-shadow: 0 0 12px rgba(0,200,83,0.9); opacity: 0.7; }
+    }
+    .pulse-dot {
+        width: 8px; height: 8px; border-radius: 50%;
+        background: #00C853;
+        animation: pulse-glow 2s ease-in-out infinite;
+        display: inline-block; flex-shrink: 0;
+    }
+
+    /* ── Staggered card fade-in ── */
+    @keyframes fadeInUp {
+        from { opacity: 0; transform: translateY(16px); }
+        to   { opacity: 1; transform: translateY(0); }
+    }
+    .card-fade { animation: fadeInUp 0.5s ease both; }
+    .card-fade:nth-child(1) { animation-delay: 0.05s; }
+    .card-fade:nth-child(2) { animation-delay: 0.12s; }
+    .card-fade:nth-child(3) { animation-delay: 0.19s; }
+    .card-fade:nth-child(4) { animation-delay: 0.26s; }
+
+    /* Ticker card hover lift */
+    .ticker-card {
+        transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+    }
+    .ticker-card:hover {
+        transform: translateY(-4px);
+        border-color: rgba(63,229,108,0.22) !important;
+        box-shadow: 0 12px 40px rgba(0,200,83,0.12);
+    }
+</style>
+</head>
+<body class="text-on-surface font-body-md antialiased min-h-screen flex flex-col">
+<!-- TopNavBar -->
+<nav class="bg-surface dark:bg-surface border-b border-outline-variant sticky top-0 z-50">
+<div class="flex justify-between items-center w-full px-container-margin py-4 max-w-full mx-auto">
+<div class="flex items-center gap-md">
+<span class="text-headline-lg font-headline-lg font-bold text-on-surface dark:text-on-surface">STOCKER</span>
+</div>
+<div class="hidden md:flex items-center gap-lg">
+<a class="text-on-surface-variant dark:text-on-surface-variant text-label-md font-label-md hover:bg-white/5 hover:text-on-surface transition-colors py-1 px-2 rounded" href="#">Dashboard</a>
+<a class="text-primary dark:text-primary-fixed-dim border-b-2 border-primary dark:border-primary-fixed-dim pb-1 text-label-md font-label-md hover:bg-white/5 transition-colors" href="#">Signals</a>
+<a class="text-on-surface-variant dark:text-on-surface-variant text-label-md font-label-md hover:bg-white/5 hover:text-on-surface transition-colors py-1 px-2 rounded" href="#">Portfolio</a>
+<a class="text-on-surface-variant dark:text-on-surface-variant text-label-md font-label-md hover:bg-white/5 hover:text-on-surface transition-colors py-1 px-2 rounded" href="#">Analytics</a>
+</div>
+<div class="flex items-center gap-sm">
+<span class="hidden md:inline-flex market-pill text-label-md font-label-md text-on-surface">
+<span class="pulse-dot"></span> Market Open
+</span>
+<button class="p-2 text-on-surface hover:bg-white/5 rounded-full transition-colors flex items-center justify-center">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">schedule</span>
+</button>
+<div class="w-8 h-8 rounded-full bg-surface-variant overflow-hidden border border-outline-variant flex items-center justify-center ml-2">
+<img class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDYJObmMtEk2uhH0rzHj9Q6RgHHDrzottwfbaejEnfa7pdztHUBqkApp25a4mpb2Exlugr94p7Qa2VxdzHswNVZ56dhGe7BEsDFNbd_Lqcesrl_Qc9AIulOLOKIGlbTNkUXYF4UORYUPs7Ty53V7fsWBLk8-gerVEmbK87bec24jYg-d6FeuweOir65sc6UWX-WcMQ_5aRSW7bYHZrFpmAdXxnO9901Iz2gPDTKRfZadAJMWi-PAck6Z5sqdZnY4mxmhH8mvt7jwl41" alt="logo"/>
+</div>
+</div>
+</div>
+</nav>
+<!-- Main Content -->
+<main class="flex-grow p-container-margin md:px-[32px] max-w-[1440px] mx-auto w-full">
+<!-- Filter Bar -->
+<div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-gap-lg gap-md mt-4">
+<div class="flex flex-wrap gap-sm">
+<button class="px-4 py-1.5 rounded-full pill-active text-label-md font-label-md">All Signals</button>
+<button class="px-4 py-1.5 rounded-full pill-inactive text-label-md font-label-md">BUY Only</button>
+<button class="px-4 py-1.5 rounded-full pill-inactive text-label-md font-label-md">SELL Only</button>
+<button class="px-4 py-1.5 rounded-full pill-inactive text-label-md font-label-md">HOLD Only</button>
+</div>
+<div class="flex items-center gap-xs text-body-sm font-body-sm text-on-surface-variant">
+<span class="material-symbols-outlined text-[16px]">sync</span>
+Last pipeline run: 2:45 PM
+</div>
+</div>
+<!-- Signals Grid -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-md">
+<!-- Card 1: BUY -->
+<div class="glass-card ticker-card card-fade rounded-lg p-card-padding flex flex-col gap-md">
+<div class="flex justify-between items-start">
+<div class="flex items-center gap-sm">
+<h3 class="text-headline-md font-headline-md font-bold tracking-tight">TCS.NS</h3>
+<span class="px-2 py-0.5 rounded text-[10px] font-bold tracking-wider bg-surface-container-high text-on-surface-variant border border-outline-variant uppercase">IT</span>
+</div>
+<div class="px-3 py-1 rounded-full text-label-md font-label-md signal-buy flex items-center gap-xs">
+<span class="material-symbols-outlined text-[14px]">trending_up</span> BUY
+</div>
+</div>
+<div class="flex flex-col items-center py-2">
+<div class="gauge-container">
+<div class="gauge-bg"></div>
+<div class="gauge-fill" style="border-bottom-color: #00C853; border-left-color: #00C853; transform: rotate(88.2deg);"></div>
+</div>
+<div class="text-number-xl font-number-xl text-on-surface mt-[-20px] z-10 bg-[#161B22] px-2 score-num-high">74</div>
+<div class="text-label-md font-label-md text-on-surface-variant uppercase mt-1">Composite Score</div>
+</div>
+<div class="flex flex-col gap-sm border-t border-outline-variant pt-3">
+<div class="flex items-center justify-between">
+<span class="text-body-sm font-body-sm text-on-surface-variant">Technical</span>
+<div class="flex items-center gap-sm w-1/2">
+<div class="h-[6px] flex-grow bg-[#21262D] rounded-full overflow-hidden">
+<div class="h-full score-bar-fill bg-primary" data-width="82"></div>
+</div>
+<span class="text-label-md font-label-md w-[24px] text-right">82</span>
+</div>
+</div>
+<div class="flex items-center justify-between">
+<span class="text-body-sm font-body-sm text-on-surface-variant">Sentiment</span>
+<div class="flex items-center gap-sm w-1/2">
+<div class="h-[6px] flex-grow bg-[#21262D] rounded-full overflow-hidden">
+<div class="h-full score-bar-fill bg-primary" data-width="65"></div>
+</div>
+<span class="text-label-md font-label-md w-[24px] text-right">65</span>
+</div>
+</div>
+<div class="flex items-center justify-between">
+<span class="text-body-sm font-body-sm text-on-surface-variant">Fundamental</span>
+<div class="flex items-center gap-sm w-1/2">
+<div class="h-[6px] flex-grow bg-[#21262D] rounded-full overflow-hidden">
+<div class="h-full score-bar-fill bg-primary" data-width="78"></div>
+</div>
+<span class="text-label-md font-label-md w-[24px] text-right">78</span>
+</div>
+</div>
+</div>
+<div class="flex justify-between items-end border-t border-outline-variant pt-3 mt-auto">
+<div>
+<div class="text-label-md font-label-md text-on-surface-variant">Current Price</div>
+<div class="text-headline-md font-headline-md">₹3,456.00</div>
+</div>
+<div class="text-right">
+<div class="text-body-sm font-body-sm text-primary flex items-center justify-end gap-xs">
+<span class="material-symbols-outlined text-[14px]">bolt</span> Confidence 72%
+</div>
+<div class="text-[10px] text-on-surface-variant mt-1">Updated 14m ago</div>
+</div>
+</div>
+<a class="text-primary hover:text-primary-fixed text-label-md font-label-md flex items-center gap-xs justify-center pt-2 w-full mt-2 bg-white/5 py-2 rounded transition-colors" href="#">
+View Details <span class="material-symbols-outlined text-[16px]">arrow_forward</span>
+</a>
+</div>
+<!-- Card 2: SELL -->
+<div class="glass-card ticker-card card-fade rounded-lg p-card-padding flex flex-col gap-md">
+<div class="flex justify-between items-start">
+<div class="flex items-center gap-sm">
+<h3 class="text-headline-md font-headline-md font-bold tracking-tight">HDFCBANK.NS</h3>
+<span class="px-2 py-0.5 rounded text-[10px] font-bold tracking-wider bg-surface-container-high text-on-surface-variant border border-outline-variant uppercase">FIN</span>
+</div>
+<div class="px-3 py-1 rounded-full text-label-md font-label-md signal-sell flex items-center gap-xs">
+<span class="material-symbols-outlined text-[14px]">trending_down</span> SELL
+</div>
+</div>
+<div class="flex flex-col items-center py-2">
+<div class="gauge-container">
+<div class="gauge-bg"></div>
+<div class="gauge-fill" style="border-bottom-color: #FF3D00; border-left-color: #FF3D00; transform: rotate(-9deg);"></div>
+</div>
+<div class="text-number-xl font-number-xl text-on-surface mt-[-20px] z-10 bg-[#161B22] px-2 score-num-low">20</div>
+<div class="text-label-md font-label-md text-on-surface-variant uppercase mt-1">Composite Score</div>
+</div>
+<div class="flex flex-col gap-sm border-t border-outline-variant pt-3">
+<div class="flex items-center justify-between">
+<span class="text-body-sm font-body-sm text-on-surface-variant">Technical</span>
+<div class="flex items-center gap-sm w-1/2">
+<div class="h-[6px] flex-grow bg-[#21262D] rounded-full overflow-hidden">
+<div class="h-full score-bar-fill bg-error" data-width="15"></div>
+</div>
+<span class="text-label-md font-label-md w-[24px] text-right">15</span>
+</div>
+</div>
+<div class="flex items-center justify-between">
+<span class="text-body-sm font-body-sm text-on-surface-variant">Sentiment</span>
+<div class="flex items-center gap-sm w-1/2">
+<div class="h-[6px] flex-grow bg-[#21262D] rounded-full overflow-hidden">
+<div class="h-full score-bar-fill bg-error" data-width="25"></div>
+</div>
+<span class="text-label-md font-label-md w-[24px] text-right">25</span>
+</div>
+</div>
+<div class="flex items-center justify-between">
+<span class="text-body-sm font-body-sm text-on-surface-variant">Fundamental</span>
+<div class="flex items-center gap-sm w-1/2">
+<div class="h-[6px] flex-grow bg-[#21262D] rounded-full overflow-hidden">
+<div class="h-full score-bar-fill bg-error" data-width="30"></div>
+</div>
+<span class="text-label-md font-label-md w-[24px] text-right">30</span>
+</div>
+</div>
+</div>
+<div class="flex justify-between items-end border-t border-outline-variant pt-3 mt-auto">
+<div>
+<div class="text-label-md font-label-md text-on-surface-variant">Current Price</div>
+<div class="text-headline-md font-headline-md">₹1,432.50</div>
+</div>
+<div class="text-right">
+<div class="text-body-sm font-body-sm text-error flex items-center justify-end gap-xs">
+<span class="material-symbols-outlined text-[14px]">bolt</span> Confidence 85%
+</div>
+<div class="text-[10px] text-on-surface-variant mt-1">Updated 21m ago</div>
+</div>
+</div>
+<a class="text-primary hover:text-primary-fixed text-label-md font-label-md flex items-center gap-xs justify-center pt-2 w-full mt-2 bg-white/5 py-2 rounded transition-colors" href="#">
+View Details <span class="material-symbols-outlined text-[16px]">arrow_forward</span>
+</a>
+</div>
+<!-- Card 3: HOLD -->
+<div class="glass-card ticker-card card-fade rounded-lg p-card-padding flex flex-col gap-md">
+<div class="flex justify-between items-start">
+<div class="flex items-center gap-sm">
+<h3 class="text-headline-md font-headline-md font-bold tracking-tight">RELIANCE.NS</h3>
+<span class="px-2 py-0.5 rounded text-[10px] font-bold tracking-wider bg-surface-container-high text-on-surface-variant border border-outline-variant uppercase">ENG</span>
+</div>
+<div class="px-3 py-1 rounded-full text-label-md font-label-md signal-hold flex items-center gap-xs">
+<span class="material-symbols-outlined text-[14px]">horizontal_rule</span> HOLD
+</div>
+</div>
+<div class="flex flex-col items-center py-2">
+<div class="gauge-container">
+<div class="gauge-bg"></div>
+<div class="gauge-fill" style="border-bottom-color: #ffbd45; border-left-color: #ffbd45; transform: rotate(45deg);"></div>
+</div>
+<div class="text-number-xl font-number-xl text-on-surface mt-[-20px] z-10 bg-[#161B22] px-2 score-num-mid">50</div>
+<div class="text-label-md font-label-md text-on-surface-variant uppercase mt-1">Composite Score</div>
+</div>
+<div class="flex flex-col gap-sm border-t border-outline-variant pt-3">
+<div class="flex items-center justify-between">
+<span class="text-body-sm font-body-sm text-on-surface-variant">Technical</span>
+<div class="flex items-center gap-sm w-1/2">
+<div class="h-[6px] flex-grow bg-[#21262D] rounded-full overflow-hidden">
+<div class="h-full score-bar-fill bg-tertiary" data-width="48"></div>
+</div>
+<span class="text-label-md font-label-md w-[24px] text-right">48</span>
+</div>
+</div>
+<div class="flex items-center justify-between">
+<span class="text-body-sm font-body-sm text-on-surface-variant">Sentiment</span>
+<div class="flex items-center gap-sm w-1/2">
+<div class="h-[6px] flex-grow bg-[#21262D] rounded-full overflow-hidden">
+<div class="h-full score-bar-fill bg-tertiary" data-width="52"></div>
+</div>
+<span class="text-label-md font-label-md w-[24px] text-right">52</span>
+</div>
+</div>
+<div class="flex items-center justify-between">
+<span class="text-body-sm font-body-sm text-on-surface-variant">Fundamental</span>
+<div class="flex items-center gap-sm w-1/2">
+<div class="h-[6px] flex-grow bg-[#21262D] rounded-full overflow-hidden">
+<div class="h-full score-bar-fill bg-tertiary" data-width="50"></div>
+</div>
+<span class="text-label-md font-label-md w-[24px] text-right">50</span>
+</div>
+</div>
+</div>
+<div class="flex justify-between items-end border-t border-outline-variant pt-3 mt-auto">
+<div>
+<div class="text-label-md font-label-md text-on-surface-variant">Current Price</div>
+<div class="text-headline-md font-headline-md">₹2,845.10</div>
+</div>
+<div class="text-right">
+<div class="text-body-sm font-body-sm text-tertiary flex items-center justify-end gap-xs">
+<span class="material-symbols-outlined text-[14px]">bolt</span> Confidence 45%
+</div>
+<div class="text-[10px] text-on-surface-variant mt-1">Updated 2m ago</div>
+</div>
+</div>
+<a class="text-primary hover:text-primary-fixed text-label-md font-label-md flex items-center gap-xs justify-center pt-2 w-full mt-2 bg-white/5 py-2 rounded transition-colors" href="#">
+View Details <span class="material-symbols-outlined text-[16px]">arrow_forward</span>
+</a>
+</div>
+<!-- Card 4: BUY -->
+<div class="glass-card ticker-card card-fade rounded-lg p-card-padding flex flex-col gap-md">
+<div class="flex justify-between items-start">
+<div class="flex items-center gap-sm">
+<h3 class="text-headline-md font-headline-md font-bold tracking-tight">INFY.NS</h3>
+<span class="px-2 py-0.5 rounded text-[10px] font-bold tracking-wider bg-surface-container-high text-on-surface-variant border border-outline-variant uppercase">IT</span>
+</div>
+<div class="px-3 py-1 rounded-full text-label-md font-label-md signal-buy flex items-center gap-xs">
+<span class="material-symbols-outlined text-[14px]">trending_up</span> BUY
+</div>
+</div>
+<div class="flex flex-col items-center py-2">
+<div class="gauge-container">
+<div class="gauge-bg"></div>
+<div class="gauge-fill" style="border-bottom-color: #00C853; border-left-color: #00C853; transform: rotate(109.8deg);"></div>
+</div>
+<div class="text-number-xl font-number-xl text-on-surface mt-[-20px] z-10 bg-[#161B22] px-2 score-num-high">86</div>
+<div class="text-label-md font-label-md text-on-surface-variant uppercase mt-1">Composite Score</div>
+</div>
+<div class="flex flex-col gap-sm border-t border-outline-variant pt-3">
+<div class="flex items-center justify-between">
+<span class="text-body-sm font-body-sm text-on-surface-variant">Technical</span>
+<div class="flex items-center gap-sm w-1/2">
+<div class="h-[6px] flex-grow bg-[#21262D] rounded-full overflow-hidden">
+<div class="h-full score-bar-fill bg-primary" data-width="90"></div>
+</div>
+<span class="text-label-md font-label-md w-[24px] text-right">90</span>
+</div>
+</div>
+<div class="flex items-center justify-between">
+<span class="text-body-sm font-body-sm text-on-surface-variant">Sentiment</span>
+<div class="flex items-center gap-sm w-1/2">
+<div class="h-[6px] flex-grow bg-[#21262D] rounded-full overflow-hidden">
+<div class="h-full score-bar-fill bg-primary" data-width="78"></div>
+</div>
+<span class="text-label-md font-label-md w-[24px] text-right">78</span>
+</div>
+</div>
+<div class="flex items-center justify-between">
+<span class="text-body-sm font-body-sm text-on-surface-variant">Fundamental</span>
+<div class="flex items-center gap-sm w-1/2">
+<div class="h-[6px] flex-grow bg-[#21262D] rounded-full overflow-hidden">
+<div class="h-full score-bar-fill bg-primary" data-width="88"></div>
+</div>
+<span class="text-label-md font-label-md w-[24px] text-right">88</span>
+</div>
+</div>
+</div>
+<div class="flex justify-between items-end border-t border-outline-variant pt-3 mt-auto">
+<div>
+<div class="text-label-md font-label-md text-on-surface-variant">Current Price</div>
+<div class="text-headline-md font-headline-md">₹1,567.80</div>
+</div>
+<div class="text-right">
+<div class="text-body-sm font-body-sm text-primary flex items-center justify-end gap-xs">
+<span class="material-symbols-outlined text-[14px]">bolt</span> Confidence 91%
+</div>
+<div class="text-[10px] text-on-surface-variant mt-1">Updated 5m ago</div>
+</div>
+</div>
+<a class="text-primary hover:text-primary-fixed text-label-md font-label-md flex items-center gap-xs justify-center pt-2 w-full mt-2 bg-white/5 py-2 rounded transition-colors" href="#">
+View Details <span class="material-symbols-outlined text-[16px]">arrow_forward</span>
+</a>
+</div>
+</div>
+</main>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        requestAnimationFrame(() => {
+            document.querySelectorAll('.score-bar-fill[data-width]').forEach(el => {
+                el.style.width = el.dataset.width + '%';
+            });
+        });
+    });
+</script>
+</body></html>
