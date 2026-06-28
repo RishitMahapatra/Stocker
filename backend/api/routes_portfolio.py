@@ -1,13 +1,15 @@
 """
 Stocker — Portfolio Routes
-/api/portfolio, /api/trades, /api/trades/open, /api/trades/{trade_id}
+/api/portfolio, /api/trades, /api/trades/open, /api/trades/{trade_id},
+/api/portfolio/positions, /api/portfolio/performance
 """
 
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 
-from backend.config import PAPER_CAPITAL
 from backend.database import get_db, PaperTrade
+from backend.paper_trading.engine import get_portfolio_summary
+from backend.paper_trading.portfolio import get_open_positions, get_performance_metrics
 
 router = APIRouter()
 
@@ -34,30 +36,17 @@ def _trade_to_dict(t) -> dict:
 
 @router.get("/api/portfolio", response_model=None)
 def get_portfolio(db: Session = Depends(get_db)):
-    all_trades  = db.query(PaperTrade).all()
-    open_trades = [t for t in all_trades if t.status == "OPEN"]
-    closed      = [t for t in all_trades if t.status != "OPEN"]
+    return get_portfolio_summary(db)
 
-    deployed_capital = sum(
-        (t.entry_price or 0.0) * (t.quantity or 0) for t in open_trades
-    )
-    available_capital = PAPER_CAPITAL - deployed_capital
-    deployed_pct      = (deployed_capital / PAPER_CAPITAL * 100) if PAPER_CAPITAL else 0.0
 
-    total_pnl   = sum(t.pnl or 0.0 for t in closed)
-    winning     = [t for t in closed if (t.pnl or 0.0) > 0]
-    win_rate    = (len(winning) / len(closed) * 100) if closed else 0.0
+@router.get("/api/portfolio/positions", response_model=None)
+def get_positions(db: Session = Depends(get_db)):
+    return get_open_positions(db)
 
-    return {
-        "total_capital":    PAPER_CAPITAL,
-        "deployed_capital": round(deployed_capital, 2),
-        "available_capital": round(available_capital, 2),
-        "deployed_pct":     round(deployed_pct, 2),
-        "open_positions":   len(open_trades),
-        "total_trades":     len(all_trades),
-        "total_pnl":        round(total_pnl, 2),
-        "win_rate":         round(win_rate, 2),
-    }
+
+@router.get("/api/portfolio/performance", response_model=None)
+def get_performance(db: Session = Depends(get_db)):
+    return get_performance_metrics(db)
 
 
 @router.get("/api/trades", response_model=None)
